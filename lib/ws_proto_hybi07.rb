@@ -64,7 +64,7 @@ class ProtoHybi07
     @connected = true
     return true
   end
-  
+    
   def read_data(sock, buffer="")
     raise "not connected" if !@connected 
     fin, opcode, payload = read_frame(sock)
@@ -91,7 +91,7 @@ class ProtoHybi07
       @close_received = true
     when 0x9 # ping
       # send pong
-      frames = create_frame(0xa, payload)
+      frame = create_frame(0xa, payload)
       sock.write(frame)      
     when 0xa # pong
       @pong_received = true

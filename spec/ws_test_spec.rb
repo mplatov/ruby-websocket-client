@@ -3,6 +3,7 @@ require 'ws_cli'
 
 host = 'ws.websocketstest.com'
 port = 8080
+
 proto = :hybi07
 
 describe WSClient do
@@ -37,7 +38,7 @@ describe WSClient do
     (str1 == resp).should be_true
     @c.close.should be_true    
   end  
-  
+    
   it "should support fragmentation test via ws-test protocol" do
     @c.connect('/test').should be_true
     resp = @c.read_data
@@ -52,6 +53,20 @@ describe WSClient do
     @c.close.should be_true
   end
   
+  it "should support ping via ws-test protocol" do
+    @c.connect('/test').should be_true
+    resp = @c.read_data
+    (resp == 'connected,').should be_true
+    str1 = "ping,"
+    @c.write_data(str1)
+    # call read to trigger sending pong response
+    resp = @c.read_data
+    # read protocol response
+    resp = @c.read_data
+    # calculate checksum
+    ('ping,success' == resp).should be_true
+    @c.close.should be_true        
+  end
   
 
 end  
