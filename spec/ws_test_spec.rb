@@ -34,7 +34,7 @@ describe WSClient do
     str1 = "echo,test"
     @c.write_data(str1)
     resp = @c.read_data
-    # calculate checksum
+    # check response
     (str1 == resp).should be_true
     @c.close.should be_true    
   end  
@@ -48,7 +48,7 @@ describe WSClient do
     str1 = "fragments,"+str
     @c.write_data(str1)
     resp = @c.read_data
-    # calculate checksum
+    # check server response
     (str1 == resp).should be_true
     @c.close.should be_true
   end
