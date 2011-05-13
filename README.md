@@ -13,7 +13,7 @@ The client assumes that the server under test support several subprotocols.
 * lws-mirror-protocol (copies any received packet to every connection also using this protocol, including the sender)
 * dumb-increment-protocol (send incrementing ASCII string every 0.5 second)
 
-### org.ietf tests
+### org.ietf [tests](http://www.ietf.org/mail-archive/web/hybi/current/msg06781.html)
 * org.ietf.websocket.test-echo-assemble (echo messages after assembling all fragments)
 * org.ietf.websocket.test-echo-fragment (echo frames randomly fragmented)
 * org.ietf.websocket.test-produce (produce messages of random size and fragmentation)
