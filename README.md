@@ -2,7 +2,7 @@
 
 Implementation of WebSocket client in ruby to talk to WebSockets server. It was developed primarily as a tool to test basic protocol conformance of a WebSocket server.
 
-This client supports [hybi-07 draft](http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07). Older version of the protocol ([draft-76](http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76)) is not supported.
+This client supports [hybi-07 draft](http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-07). Older version of the protocol ([hixie draft-76](http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76)) is not supported.
 
 The client includes some basic tests to check websocket framing, fragmentation and compression (more details in the spec folder).
 
@@ -19,6 +19,7 @@ The client assumes that the server under test support several subprotocols.
 * org.ietf.websocket.test-produce (produce messages of random size and fragmentation)
 
 
+All tests in the /spec folder could run against ws.websocketstest.com:80 websocket endpoint.
 
 
 # License
