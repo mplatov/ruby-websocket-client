@@ -70,11 +70,23 @@ class ProtoHybi07
     fin, opcode, payload = read_frame(sock)
     case opcode
     when 0x0 # continuation frame
-      return read_data(sock, buffer + payload)
+      if fin
+        return buffer + payload
+      else
+        return read_data(sock, buffer + payload)
+      end
     when 0x1 # text frame
-      return buffer + payload if fin
+        if fin
+          return buffer + payload
+        else
+          return read_data(sock, buffer + payload)
+        end
     when 0x2 # bin frame
-      return buffer + payload if fin
+      if fin
+        return buffer + payload 
+      else
+        return read_data(sock, buffer + payload)
+      end
     when 0x8 # connection close
       @close_received = true
     when 0x9 # ping
