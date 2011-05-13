@@ -12,6 +12,7 @@ The client assumes that the server under test support several subprotocols.
 ### protocols of [libwebsockets server](http://git.warmcat.com/cgi-bin/cgit/libwebsockets/)
 * lws-mirror-protocol (copies any received packet to every connection also using this protocol, including the sender)
 * dumb-increment-protocol (send incrementing ASCII string every 0.5 second)
+* fraggle-protocol
 
 ### org.ietf [tests](http://www.ietf.org/mail-archive/web/hybi/current/msg06781.html)
 * org.ietf.websocket.test-echo-assemble (echo messages after assembling all fragments)
