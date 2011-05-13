@@ -19,7 +19,7 @@ The client assumes that the server under test support several subprotocols.
 * org.ietf.websocket.test-produce (produce messages of random size and fragmentation)
 
 
-All tests in the /spec folder could run against ws.websocketstest.com:80 websocket endpoint.
+Check out the contents of the /spec folder for usage examples.
 
 
 # License

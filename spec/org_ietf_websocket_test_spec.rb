@@ -1,8 +1,8 @@
 
 require 'ws_cli'
 
-host = '127.0.0.1'
-port = 8001
+host = 'ws.websocketstest.com'
+port = 8080
 proto = :hybi07
 
 describe WSClient do

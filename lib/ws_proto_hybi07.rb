@@ -10,6 +10,7 @@ class ProtoHybi07
     @compression = options.delete(:frame_compression)
     @origin = options.delete(:origin) || "localhost"
     @masking_disabled = options.delete(:masking_disabled)
+    @big_endian = true if [1].pack("I") == [1].pack("N")
   end
   
   def init
@@ -206,7 +207,9 @@ class ProtoHybi07
         len = b.unpack('n*')[0]
       when 127
         b = sock.read(8)
-        len = b.unpack('N')[0]
+        b.reverse! if !@big_endian
+        # 2DO: change signed to unsigned.                
+        len = b.unpack('Q')[0]
       else
         len
       end
