@@ -63,7 +63,7 @@ describe WSClient do
     resp = @c.read_data
     # read protocol response
     resp = @c.read_data
-    # calculate checksum
+    # check response
     ('ping,success' == resp).should be_true
     @c.close.should be_true        
   end
