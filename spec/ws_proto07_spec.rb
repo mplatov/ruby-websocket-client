@@ -8,7 +8,7 @@ proto = :hybi07
 describe WSClient do
   before :each do
     @log = Logger.new(STDOUT)
-#    log.level = Logger::DEBUG
+#    @log.level = Logger::DEBUG
     @log.level = Logger::ERROR
     @c = WSClient.new(@log, {:host => host, :port => port, :proto => proto, :frame_compression => true})
   end
@@ -29,6 +29,33 @@ describe WSClient do
     @c.write_data(str)
     (str == @c.read_data).should be_true
     @c.close.should be_true
+  end
+  
+  it "should support sending frames with 125 bytes size" do
+    count = 125
+    str = (0...count).map{65.+(rand(25)).chr}.join
+    @c.connect('/test', ['lws-mirror-protocol']).should be_true
+    @c.write_data(str)
+    (str == @c.read_data).should be_true    
+    @c.close.should be_true    
+  end
+  
+  it "should support sending frames with 126 bytes size" do
+    count = 126
+    str = (0...count).map{65.+(rand(25)).chr}.join
+    @c.connect('/test', ['lws-mirror-protocol']).should be_true
+    @c.write_data(str)
+    (str == @c.read_data).should be_true    
+    @c.close.should be_true    
+  end
+
+  it "should support sending frames with 65536 bytes size" do
+    count = 65536
+    str = (0...count).map{65.+(rand(25)).chr}.join
+    @c.connect('/test', ['lws-mirror-protocol']).should be_true
+    @c.write_data(str)
+    (str == @c.read_data).should be_true    
+    @c.close.should be_true    
   end
   
   it "should support sending frames with the size of more that 125 bytes" do
