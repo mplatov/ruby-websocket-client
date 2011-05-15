@@ -10,6 +10,7 @@ end
 end
 
 require 'socket'
+require 'openssl'
 require 'logger'
 require 'ws_proto_hybi07'
 require 'pp'
@@ -22,6 +23,7 @@ class WSClient
     @port = options.delete(:port)
     @timeout = options.delete(:timeout) || 40
     @version = options.delete(:proto) || :hybi07
+    @secure = options[:secure] if options.has_key?(:secure)
     @proto = ProtoHybi07.new(@logger, options)
     @extensions = []
 
@@ -92,18 +94,32 @@ class WSClient
   def connect_to(host, port, timeout=nil)
     puts 
     @logger.debug("host #{host} port #{port}") 
-    addr = Socket.getaddrinfo(host, nil)
-    sock = Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0)    
 
-    if timeout
-      secs   = Integer(timeout)
-      usecs  = Integer((timeout - secs) * 1_000_000)
-      optval = [secs, usecs].pack("l_2")
-      sock.setsockopt Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, optval
-      sock.setsockopt Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, optval
-    end 
-    sock.connect(Socket.pack_sockaddr_in(port, addr[0][3]))
-    sock
+    if @secure
+      sock = TCPSocket.new(host, port)
+      ssl_context = OpenSSL::SSL::SSLContext.new()
+      puts "2DO add certificate verification"
+#      ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      ssl_context.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      ssl_context.ca_file = File.join(File.dirname(__FILE__), "cacert.pem")
+      sslsocket = OpenSSL::SSL::SSLSocket.new(sock, ssl_context)
+      sslsocket.sync_close = true
+      sslsocket.connect
+      @old_socket = sock
+      return sslsocket
+    else
+      addr = Socket.getaddrinfo(host, nil)
+      sock = Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0)      
+      if timeout
+        secs   = Integer(timeout)
+        usecs  = Integer((timeout - secs) * 1_000_000)
+        optval = [secs, usecs].pack("l_2")
+        sock.setsockopt Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, optval
+        sock.setsockopt Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, optval
+      end      
+      sock.connect(Socket.pack_sockaddr_in(port, addr[0][3]))
+      return sock
+    end
   end  
   
   def connect_i
@@ -123,6 +139,10 @@ class WSClient
     rescue Exception => e
       @logger.error("exception #{e.message}") 
       @sock.close if @sock
+      if @old_socket
+        @old_socket.close
+        @old_socket = nil
+      end
       @sock = nil      
       return nil
     end    

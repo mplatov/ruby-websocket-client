@@ -10,6 +10,7 @@ class ProtoHybi07
     @compression = options.delete(:frame_compression)
     @origin = options.delete(:origin) || "localhost"
     @masking_disabled = options.delete(:masking_disabled)
+    @secure = options.delete(:secure)
     @big_endian = true if [1].pack("I") == [1].pack("N")
   end
   
